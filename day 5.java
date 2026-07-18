@@ -21,7 +21,7 @@ class Solution {
 problem:152
 problem name:maximum product subarray
 category:medium
-soluyion:
+solution:
 class Solution {
     public int maxProduct(int[] nums) {
         int maxProd = nums[0];
@@ -46,5 +46,55 @@ class Solution {
         }
         
         return maxProd;
+    }
+}
+
+problem:164
+problem name:maximum gap
+category:medium
+solution:
+import java.util.*;
+
+class Solution {
+    public int maximumGap(int[] nums) {
+        int n = nums.length;
+        if (n < 2) return 0;
+        
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int num : nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+        
+        if (min == max) return 0; // all elements identical
+        
+        // Bucket setup: n-1 buckets, guaranteeing at least one empty bucket
+        int bucketSize = Math.max(1, (max - min) / (n - 1));
+        int bucketCount = (max - min) / bucketSize + 1;
+        
+        int[] bucketMin = new int[bucketCount];
+        int[] bucketMax = new int[bucketCount];
+        Arrays.fill(bucketMin, Integer.MAX_VALUE);
+        Arrays.fill(bucketMax, Integer.MIN_VALUE);
+        
+        // Distribute numbers into buckets, tracking only min/max per bucket
+        for (int num : nums) {
+            int idx = (num - min) / bucketSize;
+            bucketMin[idx] = Math.min(bucketMin[idx], num);
+            bucketMax[idx] = Math.max(bucketMax[idx], num);
+        }
+        
+        // Scan buckets left to right; gap = (this bucket's min) - (prev non-empty bucket's max)
+        int maxGap = 0;
+        int prevMax = min;
+        
+        for (int i = 0; i < bucketCount; i++) {
+            if (bucketMin[i] == Integer.MAX_VALUE) continue; // empty bucket, skip
+            maxGap = Math.max(maxGap, bucketMin[i] - prevMax);
+            prevMax = bucketMax[i];
+        }
+        
+        return maxGap;
     }
 }
