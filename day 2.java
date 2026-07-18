@@ -90,3 +90,50 @@ class Solution {
         System.out.println("Extra test 2: " + solution.wordBreak(s5, wordDict5) + " (Expected: true)");
     }
 }
+
+
+problem :131
+problem name:palidrome partitioning
+category:medium
+solution:
+import java.util.*;
+
+class Solution {
+    public List<List<String>> partition(String s) {
+        int n = s.length();
+        boolean[][] isPalin = new boolean[n][n];
+        
+        // Precompute palindrome table
+        for (int end = 0; end < n; end++) {
+            for (int start = 0; start <= end; start++) {
+                if (s.charAt(start) == s.charAt(end) && 
+                    (end - start <= 2 || isPalin[start + 1][end - 1])) {
+                    isPalin[start][end] = true;
+                }
+            }
+        }
+        
+        List<List<String>> result = new ArrayList<>();
+        List<String> current = new ArrayList<>();
+        backtrack(s, 0, isPalin, current, result);
+        return result;
+    }
+    
+    private void backtrack(String s, int start, boolean[][] isPalin, 
+                            List<String> current, List<List<String>> result) {
+        int n = s.length();
+        
+        if (start == n) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+        
+        for (int end = start; end < n; end++) {
+            if (isPalin[start][end]) {
+                current.add(s.substring(start, end + 1));
+                backtrack(s, end + 1, isPalin, current, result);
+                current.remove(current.size() - 1); // backtrack
+            }
+        }
+    }
+}
