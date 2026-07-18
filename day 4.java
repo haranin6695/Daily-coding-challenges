@@ -121,3 +121,37 @@ class Solution {
         return a == 0 ? 1 : a; // avoid division by zero
     }
 }
+
+problem:160
+problem name:interaction of two linked list
+category:easy
+solution:
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) return null;
+        
+        ListNode pA = headA;
+        ListNode pB = headB;
+        
+        // When pA reaches end of A, redirect to headB.
+        // When pB reaches end of B, redirect to headA.
+        // They meet at the intersection, or both become null simultaneously.
+        while (pA != pB) {
+            pA = (pA == null) ? headB : pA.next;
+            pB = (pB == null) ? headA : pB.next;
+        }
+        
+        return pA; // either the intersection node, or null
+    }
+}
