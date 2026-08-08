@@ -1,0 +1,51 @@
+problem:971
+problem name: Flip Binary Tree To Match Preorder Traversal
+category:medium
+solution:
+class Solution {
+    int vix = 0;
+    List<Integer> ans = new ArrayList<>();
+    private void dfs(TreeNode node, int[] V) {
+        if (node == null || (ans.size() != 0 && ans.get(0) == -1)) return;
+        if (node.val != V[vix++])
+            ans = new ArrayList<Integer>(Arrays.asList(-1));
+        else if (node.left != null && node.left.val != V[vix]) {
+            ans.add(node.val);
+            dfs(node.right, V);
+            dfs(node.left, V);
+        } else {
+            dfs(node.left, V);
+            dfs(node.right, V);
+        }
+    }
+    public List<Integer> flipMatchVoyage(TreeNode root, int[] V) {
+        dfs(root, V);
+        return ans;
+    }
+}
+
+
+
+problem:303
+problem name:Range Sum Query - Immutable
+category:easy
+solution:
+class NumArray {
+    public int[] nums;
+
+    public NumArray(int[] nums) {
+        this.nums = nums;
+    }
+    
+    public int sumRange(int left, int right) {
+        int sum = 0;
+
+        for(int i=left; i<=right; i++) {
+            sum += nums[i];
+        }
+
+        return sum;
+    }
+}
+
+
